@@ -1,0 +1,82 @@
+[gd_scene load_steps=7 format=3 uid="uid://x0e5qtq1ctof"]
+
+[ext_resource type="Script" path="res://scripts/cannon.gd" id="1_a8mtl"]
+[ext_resource type="PackedScene" uid="uid://c8rv0ernhoj8i" path="res://scenes/weapons/cannon_bullet.tscn" id="2_13cuc"]
+[ext_resource type="Texture2D" uid="uid://bi05fbuik0hw7" path="res://assets/weapons/Main Ship - Weapons - Auto Cannon.png" id="3_7yn0s"]
+
+[sub_resource type="Animation" id="Animation_ak33e"]
+resource_name = "shoot"
+length = 0.35
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 0]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.05, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [0],
+"method": &"fire_bullet"
+}, {
+"args": [1],
+"method": &"fire_bullet"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_t08jp"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_cnsvg"]
+_data = {
+"RESET": SubResource("Animation_t08jp"),
+"shoot": SubResource("Animation_ak33e")
+}
+
+[node name="Cannon" type="Node2D" node_paths=PackedStringArray("spawn_locations", "shooting_animation")]
+position = Vector2(0, -8)
+script = ExtResource("1_a8mtl")
+spawn_locations = [NodePath("LeftProjectileSpawn"), NodePath("RightProjectileSpawn")]
+projectile = ExtResource("2_13cuc")
+shooting_animation = NodePath("ShootingAnimation")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("3_7yn0s")
+hframes = 7
+
+[node name="ShootingAnimation" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_cnsvg")
+}
+
+[node name="RightProjectileSpawn" type="Marker2D" parent="."]
+position = Vector2(9, -6)
+
+[node name="LeftProjectileSpawn" type="Marker2D" parent="."]
+position = Vector2(-9, -6)

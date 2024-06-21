@@ -1,0 +1,60 @@
+[gd_scene load_steps=10 format=3 uid="uid://c8rv0ernhoj8i"]
+
+[ext_resource type="Script" path="res://scripts/cannon_bullet.gd" id="1_e6ava"]
+[ext_resource type="Texture2D" uid="uid://p0v4hs6q4g2m" path="res://assets/weapons/Main ship weapon - Projectile - Auto cannon bullet.png" id="2_xfeuy"]
+[ext_resource type="PackedScene" uid="uid://ck72pwa7mbv1r" path="res://scenes/properties/hit_property.tscn" id="3_51e21"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_olht8"]
+atlas = ExtResource("2_xfeuy")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xqfw5"]
+atlas = ExtResource("2_xfeuy")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r5arx"]
+atlas = ExtResource("2_xfeuy")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vxj8d"]
+atlas = ExtResource("2_xfeuy")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ldr0n"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_olht8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xqfw5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r5arx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vxj8d")
+}],
+"loop": true,
+"name": &"moving",
+"speed": 8.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_nrd2x"]
+radius = 1.0
+
+[node name="CannonBullet" type="CharacterBody2D"]
+script = ExtResource("1_e6ava")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.3, 0.3)
+sprite_frames = SubResource("SpriteFrames_ldr0n")
+animation = &"moving"
+autoplay = "moving"
+
+[node name="HitProperty" parent="." instance=ExtResource("3_51e21")]
+collision_layer = 2
+damage = 5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitProperty"]
+shape = SubResource("CircleShape2D_nrd2x")

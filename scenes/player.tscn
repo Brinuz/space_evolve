@@ -1,0 +1,120 @@
+[gd_scene load_steps=18 format=3 uid="uid://d0u7q354afp11"]
+
+[ext_resource type="Script" path="res://scripts/player.gd" id="1_eecqk"]
+[ext_resource type="Texture2D" uid="uid://cck4f0r4r50tt" path="res://assets/ship/Main Ship - Base - Full health.png" id="1_o8p7h"]
+[ext_resource type="Texture2D" uid="uid://t6vyex6yf5c7" path="res://assets/engine/Main Ship - Engines - Base Engine - Spritesheet.png" id="2_g0hfi"]
+[ext_resource type="PackedScene" uid="uid://x0e5qtq1ctof" path="res://scenes/weapons/cannon.tscn" id="2_qh5pr"]
+[ext_resource type="Texture2D" uid="uid://cfiu6qwyxhrob" path="res://assets/engine/Main Ship - Engines - Base Engine.png" id="3_gplbl"]
+[ext_resource type="PackedScene" uid="uid://bpj5tbplvsvkn" path="res://scenes/properties/health_property.tscn" id="6_8g8l3"]
+[ext_resource type="PackedScene" uid="uid://dw6om270qaown" path="res://scenes/properties/hit_box_property.tscn" id="7_m4771"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nsrgm"]
+atlas = ExtResource("2_g0hfi")
+region = Rect2(0, 72, 48, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uaf2b"]
+atlas = ExtResource("2_g0hfi")
+region = Rect2(48, 72, 48, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ps6ce"]
+atlas = ExtResource("2_g0hfi")
+region = Rect2(96, 72, 48, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8ptp1"]
+atlas = ExtResource("2_g0hfi")
+region = Rect2(144, 72, 48, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_scsnw"]
+atlas = ExtResource("2_g0hfi")
+region = Rect2(0, 24, 48, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_22u3x"]
+atlas = ExtResource("2_g0hfi")
+region = Rect2(48, 24, 48, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l38lc"]
+atlas = ExtResource("2_g0hfi")
+region = Rect2(96, 24, 48, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ld2xu"]
+atlas = ExtResource("2_g0hfi")
+region = Rect2(0, 72, 48, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_0k5jw"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nsrgm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uaf2b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ps6ce")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8ptp1")
+}],
+"loop": true,
+"name": &"boost",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_scsnw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_22u3x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l38lc")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ld2xu")
+}],
+"loop": true,
+"name": &"slow",
+"speed": 8.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_npelu"]
+radius = 11.0
+
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("engine_animation")]
+script = ExtResource("1_eecqk")
+engine_animation = NodePath("EngineEffects")
+
+[node name="Cannon" parent="." instance=ExtResource("2_qh5pr")]
+
+[node name="EngineEffects" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, 4)
+sprite_frames = SubResource("SpriteFrames_0k5jw")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="Engine" type="Sprite2D" parent="."]
+position = Vector2(0, -8)
+texture = ExtResource("3_gplbl")
+
+[node name="Ship" type="Sprite2D" parent="."]
+position = Vector2(0, -9)
+texture = ExtResource("1_o8p7h")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -8)
+shape = SubResource("CircleShape2D_npelu")
+
+[node name="HealthProperty" parent="." instance=ExtResource("6_8g8l3")]
+MAX_HP = 50
+
+[node name="HitBoxProperty" parent="." node_paths=PackedStringArray("health") instance=ExtResource("7_m4771")]
+health = NodePath("../HealthProperty")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBoxProperty"]
+position = Vector2(0, -8)
+shape = SubResource("CircleShape2D_npelu")
